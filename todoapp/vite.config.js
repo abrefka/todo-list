@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/todoapp/',
+  base: '/todo-list/',
   plugins: [
     react(),
     VitePWA({
@@ -17,8 +17,8 @@ export default defineConfig({
         theme_color: "#cdfcd8",
         background_color: "#ffffff",
         display: "standalone",
-        start_url: "/todoapp/",
-        scope: "/todoapp/",
+        start_url: "/todo-list/",
+        scope: "/todo-list/",
         icons: [
           {
             src: "icon-192.png",
