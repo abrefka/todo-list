@@ -1,0 +1,140 @@
+#root {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.nav-button,
+button {
+  padding: 0.65rem 1rem;
+  border: none;
+  border-radius: 999px;
+  background-color: #2563eb;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.nav-button:hover,
+button:hover {
+  background-color: #1d4ed8;
+}
+
+.nav-button.active {
+  background-color: #1e3a8a;
+}
+
+.todo-input-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 16px;
+}
+
+input,
+select {
+  padding: 0.6rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  min-width: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.todo-item {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 1rem;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+.todo-item.completed {
+  border-color: #34d399;
+  background: #f0fdf4;
+}
+
+.todo-main {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.todo-text {
+  margin: 0 0 0.35rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.todo-meta {
+  margin: 0;
+  color: #64748b;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.todo-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.delete-button {
+  background-color: #dc2626;
+}
+
+.delete-button:hover {
+  background-color: #b91c1c;
+}
+
+.empty-state {
+  margin: 0;
+  text-align: center;
+  color: #64748b;
+  padding: 2rem;
+  background: #f8fafc;
+  border-radius: 14px;
+}
+
+@media (max-width: 700px) {
+  .todo-main {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .todo-input-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
