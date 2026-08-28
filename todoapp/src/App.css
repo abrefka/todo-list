@@ -36,6 +36,23 @@ button:hover {
   background-color: #1e3a8a;
 }
 
+.add-task-button {
+  background-color: #16a34a;
+  font-weight: 700;
+  box-shadow: 0 4px 6px rgba(16, 185, 129, 0.1), 0 2px 4px rgba(16, 185, 129, 0.06);
+}
+
+.add-task-button::before {
+  content: '+';
+  margin-right: 0.4rem;
+  font-size: 1.1rem;
+  line-height: 0;
+}
+
+.add-task-button:hover {
+  background-color: #15803d;
+}
+
 .todo-input-container {
   display: flex;
   flex-wrap: wrap;
@@ -128,6 +145,10 @@ select {
 }
 
 @media (max-width: 700px) {
+  .add-task-button {
+    margin-left: 0;
+  }
+
   .todo-main {
     flex-direction: column;
     align-items: flex-start;

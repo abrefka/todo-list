@@ -12,6 +12,12 @@ const emptyDraft = {
 const filters = ['all', 'daily', 'weekly', 'one-time']
 const weekdayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
+function getDefaultTaskType(filter) {
+  return filter === 'daily' || filter === 'weekly' || filter === 'one-time'
+    ? filter
+    : 'one-time'
+}
+
 function getTimeValue(timeValue, fallback) {
   return timeValue || fallback
 }
@@ -70,6 +76,21 @@ function getNextReset(todo, referenceDate = new Date()) {
   return nextReset
 }
 
+function resetExpiredRecurringTodos(savedTodos, now = new Date()) {
+  return savedTodos.map((todo) => {
+    if (!todo.completed || (todo.type !== 'daily' && todo.type !== 'weekly')) {
+      return todo
+    }
+
+    const completedAt = todo.completedAt ? new Date(todo.completedAt) : new Date(todo.createdAt)
+    const nextReset = getNextReset(todo, completedAt)
+
+    return now >= nextReset
+      ? { ...todo, completed: false, completedAt: null }
+      : todo
+  })
+}
+
 function App() {
   const [todos, setTodos] = useState([])
   const [draft, setDraft] = useState(emptyDraft)
@@ -80,7 +101,7 @@ function App() {
     const savedTodos = window.localStorage.getItem('todo-board-items')
     if (savedTodos) {
       try {
-        setTodos(JSON.parse(savedTodos))
+        setTodos(resetExpiredRecurringTodos(JSON.parse(savedTodos)))
       } catch {
         window.localStorage.removeItem('todo-board-items')
       }
@@ -93,22 +114,7 @@ function App() {
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
-      setTodos((currentTodos) =>
-        currentTodos.map((todo) => {
-          if (!todo.completed || (todo.type !== 'daily' && todo.type !== 'weekly')) {
-            return todo
-          }
-
-          const completedAt = todo.completedAt ? new Date(todo.completedAt) : new Date(todo.createdAt)
-          const nextReset = getNextReset(todo, completedAt)
-
-          if (new Date() >= nextReset) {
-            return { ...todo, completed: false, completedAt: null }
-          }
-
-          return todo
-        })
-      )
+      setTodos((currentTodos) => resetExpiredRecurringTodos(currentTodos))
     }, 60000)
 
     return () => window.clearInterval(intervalId)
@@ -123,7 +129,6 @@ function App() {
 
     const text = draft.text.trim()
     if (!text) return
-    // if (draft.type === 'one-time' && !draft.completeByDate) return
     if (draft.type === 'weekly' && !draft.dayOfWeek) return
 
     const normalizedTime = draft.type === 'one-time'
@@ -167,6 +172,11 @@ function App() {
     setTodos((currentTodos) => currentTodos.filter((todo) => todo.id !== todoId))
   }
 
+  const openAddTask = () => {
+    setDraft({ ...emptyDraft, type: getDefaultTaskType(activeFilter) })
+    setActiveView('add')
+  }
+
   return (
     <div className="app-shell">
       <div className="nav">
@@ -193,8 +203,8 @@ function App() {
         })}
 
         <button
-          className={activeView === 'add' ? 'nav-button active' : 'nav-button'}
-          onClick={() => setActiveView('add')}
+          className="nav-button add-task-button"
+          onClick={openAddTask}
           type="button"
         >
           Add task
@@ -242,7 +252,7 @@ function App() {
 
           {draft.type === 'one-time' && (
             <label className="field" htmlFor="complete-by-date">
-              <span>Complete by date</span>
+              <span>Complete by date (optional)</span>
               <input
                 id="complete-by-date"
                 type="date"
